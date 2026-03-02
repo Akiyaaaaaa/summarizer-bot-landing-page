@@ -1,0 +1,43 @@
+name: Deploy Frontend to GCP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to GCP VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USERNAME }}
+          key: ${{ secrets.GCP_SSH_KEY }}
+          script: |
+            cd ~/bot-ai-sum-landing-page || {
+              echo "Directory does not exist. Cloning repository..."
+              git clone https://github.com/Akiyaaaaaa/bot-dc-ai-summarize.git ~/bot-ai-sum-landing-page
+              cd ~/bot-ai-sum-landing-page
+            }
+
+            git pull origin main
+
+            docker stop bot-landing-page || true
+            docker rm bot-landing-page || true
+
+            docker build -t bot-landing-page-img .
+
+            docker run -d \
+              --name bot-landing-page \
+              --restart unless-stopped \
+              --network akiyaaa-network \
+              bot-landing-page-img
+
+            docker image prune -f
