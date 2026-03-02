@@ -21,10 +21,10 @@ jobs:
           username: ${{ secrets.GCP_USERNAME }}
           key: ${{ secrets.GCP_SSH_KEY }}
           script: |
-            cd ~/bot-ai-sum-landing-page || {
+            cd ~/summarizer-bot-landing-page || {
               echo "Directory does not exist. Cloning repository..."
-              git clone https://github.com/Akiyaaaaaa/bot-dc-ai-summarize.git ~/bot-ai-sum-landing-page
-              cd ~/bot-ai-sum-landing-page
+              git clone https://github.com/Akiyaaaaaa/summarizer-bot-landing-page ~/summarizer-bot-landing-page
+              cd ~/summarizer-bot-landing-page
             }
 
             git pull origin main
