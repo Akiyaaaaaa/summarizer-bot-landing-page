@@ -35,6 +35,7 @@ jobs:
             docker build -t bot-landing-page-img .
 
             docker run -d \
+              -p 3001:80 \
               --name bot-landing-page \
               --restart unless-stopped \
               --network akiyaaa-network \
